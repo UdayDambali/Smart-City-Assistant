@@ -1,0 +1,14 @@
+[
+  {"tip": "Switch to LED lighting", "category": "Energy"},
+  {"tip": "Use public transport", "category": "Transport"},
+  {"tip": "Compost organic waste", "category": "Waste"},
+  {"tip": "Save water by fixing leaks", "category": "Water"},
+  {"tip": "Take shorter showers to conserve water", "category": "Water"},
+  {"tip": "Turn off the tap while brushing your teeth", "category": "Water"},
+  {"tip": "Plant native species to reduce water usage", "category": "Water"},
+  {"tip": "Recycle paper, plastic, and glass", "category": "Waste"},
+  {"tip": "Use reusable shopping bags", "category": "Waste"},
+  {"tip": "Walk or bike for short trips", "category": "Transport"},
+  {"tip": "Unplug electronics when not in use", "category": "Energy"},
+  {"tip": "Install a programmable thermostat", "category": "Energy"}
+]

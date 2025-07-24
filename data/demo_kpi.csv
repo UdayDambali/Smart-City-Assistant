@@ -1,0 +1,4 @@
+city,kpi_name,value,target,unit
+Delhi,Air Quality Index,180,100,AQI
+Mumbai,Water Usage,120,100,Liters/Capita
+Bangalore,Energy Usage,85,75,kWh
