@@ -42,8 +42,8 @@ model = ModelInference(
   api_client=client,
   project_id=settings.PROJECT_ID,
   params = {
-      "max_new_tokens": 100,
-      "temperature": 0.3  # Lowered for more factual answers
+      "max_new_tokens": 200,
+      "temperature": 0.6  # Lowered for more factual answers
   }
 )
 
@@ -52,9 +52,11 @@ def generate_chat_response(prompt: str, chat_history=None):
     Generate a response using the LLM, with optional chat history for context.
     """
     system_prompt = (
-        "You are a helpful and factual smart city assistant. "
-        "Answer questions concisely and accurately. "
-        "If you don't know the answer, say so.\n"
+    "You are SmartCity, an intelligent assistant designed to help users with smart city-related topics, "
+    "such as sustainability, citizen feedback, urban data analysis, policy summaries, KPIs, and more.\n"
+    "Always provide factual, concise, and helpful answers based on available information.\n"
+    "If you're unsure or the data is unavailable, respond honestly and suggest possible next steps.\n"
+    "Avoid speculation, stay on topic, and guide the user toward useful resources or actions when needed.\n"
     )
     # If chat_history is provided, prepend it as context
     history_text = ""

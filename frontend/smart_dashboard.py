@@ -14,6 +14,8 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import PyPDF2
 import docx
+import binascii
+import pdfplumber
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -42,10 +44,25 @@ def generate_sustainability_report_gemini(kpi_summary, api_key):
     return response.text
 
 def extract_text_from_pdf(file):
-    reader = PyPDF2.PdfReader(file)
     text = ""
-    for page in reader.pages:
-        text += page.extract_text() or ""
+    try:
+        print("[DEBUG] Trying PyPDF2 extraction...")
+        reader = PyPDF2.PdfReader(file)
+        for page in reader.pages:
+            text += page.extract_text() or ""
+    except (binascii.Error, PyPDF2.errors.PdfReadError) as e:
+        print(f"[DEBUG] PyPDF2 failed: {e}. Trying pdfplumber fallback...")
+        try:
+            file.seek(0)
+            with pdfplumber.open(file) as pdf:
+                for page in pdf.pages:
+                    text += page.extract_text() or ""
+        except Exception as e2:
+            print(f"[DEBUG] pdfplumber also failed: {e2}")
+            text = "Error: The uploaded file may be corrupted or not a valid PDF."
+    except Exception as e:
+        print(f"[DEBUG] General error in PDF extraction: {e}")
+        text = f"Error: {e}"
     return text
 
 def extract_text_from_docx(file):
@@ -288,7 +305,14 @@ elif selected == "Policy Summarizer":
     uploaded_file = st.file_uploader("Upload Policy File (PDF, DOCX, TXT)", type=["pdf", "docx", "txt"])
     policy_text = ""
     if uploaded_file:
+        print("[DEBUG] File name:", uploaded_file.name)
+        print("[DEBUG] File type:", uploaded_file.type)
+        print("[DEBUG] File size:", uploaded_file.size)
         if uploaded_file.name.endswith(".pdf"):
+            uploaded_file.seek(0)
+            file_bytes = uploaded_file.read()
+            print("[DEBUG] First 20 bytes:", file_bytes[:20])
+            uploaded_file.seek(0)
             policy_text = extract_text_from_pdf(uploaded_file)
         elif uploaded_file.name.endswith(".docx"):
             policy_text = extract_text_from_docx(uploaded_file)
